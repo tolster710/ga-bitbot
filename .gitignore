@@ -1,1 +1,6 @@
 datafeed/bcfeed*csv
+*pyc
+config/api_key.txt
+config/gene_server_db_library.json
+config/gene_server_db_library.json.bak
+config/salt.txt
