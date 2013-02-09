@@ -1,6 +1,6 @@
 
 """
-load_config v0.01 
+load_config v0.01
 
 configuration loader
 
@@ -126,3 +126,4 @@ if __name__ == "__main__":
 
     print g.pool_size
     print g.contains
+
