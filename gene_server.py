@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 """
-gene_server v0.01 
+gene_server v0.01
 
 - a xmlrpc server providing a storage/query service for the GA trade system
 
@@ -23,7 +23,7 @@ This file is part of ga-bitbot.
     along with ga-bitbot.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-# 
+#
 #   gene server
 #	- a xmlrpc server providing a storage/query/configuration/monitoring service for the GA trade system
 #
@@ -144,7 +144,7 @@ def get_active_quartile(pid=None):
 	#return g_gene_library[gdh]['g_active_quartile']
 	return g_active_quartile
 
-@call_metrics.call_metrics 
+@call_metrics.call_metrics
 def get_gene(n_sec,quartile,pid = None):
 	global g_d
 	global g_bobs
@@ -169,13 +169,13 @@ def get_gene(n_sec,quartile,pid = None):
 	if len(r) == 0:
 		r = sorted(g_gene_library[gdh]['gene_high_scores'][quartile - 1], key=itemgetter('score'),reverse = True)[0]
 		r.append(sorted(g_gene_library[gdh]['gene_best'][quartile - 1], key=itemgetter('score'),reverse = True)[0])
-	
+
 	if len(r) > 1:
 		#if more than one record found find the highest scoring one
 		r = sorted(r, key=itemgetter('score'),reverse = True)[0]
 
 	print "get",r['time'],r['score']
-		
+
 	return json.dumps(r)
 
 @call_metrics.call_metrics
@@ -212,13 +212,13 @@ def put_gene(d,quartile,pid = None):
 				g_gene_library[gdh]['gene_high_scores'][quartile - 1].pop(i)
 				break
 
-	if d['score'] != -987654321.12346:	
+	if d['score'] != -987654321.12346:
 		#timestamp the gene submission
 		d['time'] = time.time()
 
 		g_gene_library[gdh]['gene_high_scores'][quartile - 1].append(d)
 		g_gene_library[gdh]['gene_high_scores'][quartile - 1] = sorted(g_gene_library[gdh]['gene_high_scores'][quartile - 1], key=itemgetter('score'),reverse = True)
-	
+
 		print "put",d['time'],d['score']
 		#prune the dictionary list
 		if len(g_gene_library[gdh]['gene_high_scores'][quartile - 1]) > max_len:
@@ -262,14 +262,14 @@ def put_bob(d,quartile,pid = None):
 
 		g_gene_library[gdh]['gene_best'][quartile - 1].append(d)
 		g_gene_library[gdh]['gene_best'][quartile - 1] = sorted(g_gene_library[gdh]['gene_best'][quartile - 1], key=itemgetter('score'),reverse = True)
-	
+
 		print "put bob",d['time'],d['score']
 		#prune the dictionary list
 		if len(g_gene_library[gdh]['gene_best'][quartile - 1]) > max_bobs:
 			g_gene_library[gdh]['gene_best'][quartile - 1] = g_gene_library[gdh]['gene_best'][quartile - 1][:max_bobs]
 	return "OK"
 
-#remote process services 
+#remote process services
 @call_metrics.call_metrics
 def pid_register_gene_def(pid,gene_def):
 	global g_pids
@@ -302,8 +302,8 @@ def pid_register_client(pid,gene_def_hash):
 		if g_default_group_set == False:
 			g_default_group_set = True
 			g_default_group_gene_def_hash = gene_def_hash
-		pid_alive(pid)		
-		g_pids[pid].update({'gene_def_hash':gene_def_hash})		
+		pid_alive(pid)
+		g_pids[pid].update({'gene_def_hash':gene_def_hash})
 		return "OK"
 	return "NOK:HASH NOT FOUND:"+gene_def_hash
 
@@ -472,10 +472,10 @@ def reload_db():
 	reload_error = False
 	#save the gene db before shut down
 	print "reloading stored gene data into server..."
-	
+
 	#
 	# migrate any old style db archives from old db format into the new format...delete the old files once migrated
-	#	
+	#
 	for quartile in [1,2,3,4]:
 		try:
 			f = open('./config/gene_server_db_backup_quartile' + str(quartile) + '.json','r')
@@ -489,7 +489,7 @@ def reload_db():
 			reload_error = True #force load the backup too
 			save_db() #save using the new format
 			#delete the old format files once loaded.
-			os.remove('./config/gene_server_db_backup_quartile' + str(quartile) + '.json')	
+			os.remove('./config/gene_server_db_backup_quartile' + str(quartile) + '.json')
 		except:
 			reload_error = True
 	#migrate the backups too...
