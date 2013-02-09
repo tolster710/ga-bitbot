@@ -1,4 +1,5 @@
 datafeed/bcfeed*csv
+datafeed_reboot/*
 *pyc
 config/api_key.txt
 config/gene_server_db_library.json
