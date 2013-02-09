@@ -1,6 +1,6 @@
 
 """
-logs v0.01 
+logs v0.01
 
 simple keyed dictionary log
 
@@ -25,68 +25,68 @@ This file is part of ga-bitbot.
 import json
 
 class logs:
-	def __init__(self):
-		self._log = {}
-	
-	def addkey(self,key):
-		if self._log.has_key(key):
-			return
-		else:
-			self._log.update({key:[]})
-		return
+    def __init__(self):
+        self._log = {}
+
+    def addkey(self,key):
+        if self._log.has_key(key):
+            return
+        else:
+            self._log.update({key:[]})
+        return
 
 
-	def append(self,key,value):
-		if self._log.has_key(key):
-			self._log[key].append(value)
-		else:
-			self._log.update({key:[value]})
-		return
+    def append(self,key,value):
+        if self._log.has_key(key):
+            self._log[key].append(value)
+        else:
+            self._log.update({key:[value]})
+        return
 
-	def get(self,key):
-		if self._log.has_key(key):
-			return self._log[key]
-		else:
-			return None
+    def get(self,key):
+        if self._log.has_key(key):
+            return self._log[key]
+        else:
+            return None
 
-	def reset(self):
-		self._log = {}
+    def reset(self):
+        self._log = {}
 
-	def json(self):
-		return json.dumps(self._log)
+    def json(self):
+        return json.dumps(self._log)
 
 
 if __name__ == "__main__":
-	log = logs()
-	log.append('alog',0)
-	log.append('alog',1)
-	log.append('alog',2)
-	log.append('alog',3)
-	log.append('alog',4)
-	log.append('alog',5)
+    log = logs()
+    log.append('alog',0)
+    log.append('alog',1)
+    log.append('alog',2)
+    log.append('alog',3)
+    log.append('alog',4)
+    log.append('alog',5)
 
-	log.append('blog','a')
-	log.append('blog','b')
-	log.append('blog','c')
-	log.append('blog','d')
-	log.append('blog','e')
-	log.append('blog','f')
+    log.append('blog','a')
+    log.append('blog','b')
+    log.append('blog','c')
+    log.append('blog','d')
+    log.append('blog','e')
+    log.append('blog','f')
 
-	log.append('list',[0,1,2])
-	log.append('list',[3,4,5])
-	log.append('list',[6,7,8])
+    log.append('list',[0,1,2])
+    log.append('list',[3,4,5])
+    log.append('list',[6,7,8])
 
-	log.addkey('empty')
+    log.addkey('empty')
 
-	print log.get('alog')
-	print log.get('blog')
-	print log.get('list')
+    print log.get('alog')
+    print log.get('blog')
+    print log.get('list')
 
-	print log.json()
-	log.reset()
+    print log.json()
+    log.reset()
 
-	print log.get('alog')
-	print log.get('blog')
-	print log.get('list')
+    print log.get('alog')
+    print log.get('blog')
+    print log.get('list')
 
-	
+
