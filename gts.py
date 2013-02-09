@@ -51,7 +51,7 @@ if __name__ == "__main__":
   print "gts: connected to gene_server ",__server__,":",__port__
 
 
-  #the variable values below are superceded by the configuration loaded from the
+  #the variable values below are superceded by the configuration loaded from the 
   #configuration file global_config.json
   #!!!!!!!! to change the values edit the json configuration file NOT the variables below !!!!!!!!
   max_length = 60 * 24 * 60
