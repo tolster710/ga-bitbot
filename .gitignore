@@ -1,0 +1,13 @@
+datafeed/bcfeed*csv
+*pyc
+config/api_key.txt
+config/gene_server_db_library.json
+config/gene_server_db_library.json.bak
+config/salt.txt
+report/gene_server_error_log.txt
+report/gts_error_log.txt
+report/book.html
+report/bookie_records.pkl
+report/char_test_?.html
+report/char_test_zoom_?.html
+report/gene_visualizer.html
