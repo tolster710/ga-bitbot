@@ -1,6 +1,6 @@
 
 """
-gts v0.01
+gts v0.01 
 
 genetic test sequencer
 
@@ -36,7 +36,7 @@ from load_config import *
 random.seed(time.time())
 
 if __name__ == "__main__":
-  __appversion__ = "0.01a"
+  __appversion__ = "0.01a-tim"
   print "Genetic Test Sequencer v%s"%__appversion__
 
   # connect to the xml server
@@ -45,12 +45,12 @@ if __name__ == "__main__":
   __port__ = str(gene_server_config.__port__)
 
   #make sure the port number matches the server.
-  server = xmlrpclib.Server('http://' + __server__ + ":" + __port__)
+  server = xmlrpclib.Server('http://' + __server__ + ":" + __port__)  
   multicall = xmlrpclib.MultiCall(server)
 
   print "gts: connected to gene_server ",__server__,":",__port__
 
-
+  
   #the variable values below are superceded by the configuration loaded from the 
   #configuration file global_config.json
   #!!!!!!!! to change the values edit the json configuration file NOT the variables below !!!!!!!!
@@ -274,7 +274,7 @@ if __name__ == "__main__":
     print "gts: %s high scores loaded"%len(bootstrap_all)
 
     print "gts: Pool size: %s"%len(g.pool)
-
+  
   else:
     bob_simulator = False
     #update_all_scores = False
@@ -334,8 +334,8 @@ if __name__ == "__main__":
       print performance_metrics
       pmd = {'channel':'gts_metric','gps':gps,'kss':kss,'pool':g.pool_size,'total':total_count}
       server.pid_msg(pid,json.dumps(pmd))
-
-    if g.local_optima_reached:
+      
+    if g.local_optima_reached:  
       test_count = 0
 
       #initialize fitness function (load updated data)
@@ -352,7 +352,7 @@ if __name__ == "__main__":
             multicall()  #send any batched calls to the server
             print "gts: run once done."
             gts_exit("gts: run once done.",pid)
-
+      
       elif max_gene != None:
         #debug
         print "gts: ",max_gene
@@ -360,7 +360,7 @@ if __name__ == "__main__":
         print "gts: submit BOB for id:%s to server (%.2f)"%(str(max_gene['id']),max_gene['score'])
         server.put_bob(json.dumps(max_gene),quartile,pid)
         if quartile_cycle == True:
-          #if cycling is enabled then
+          #if cycling is enabled then 
           #the client will cycle through the quartiles as local optimas are found
           #jump to the next quartile
           quartile += 1
@@ -403,7 +403,7 @@ if __name__ == "__main__":
           else:
             #mate the genes before testing
             g.next_gen() 
-
+          
         else: #if no BOBS or high scores..seed with a new population
           #print "no BOBs or high scores available...seeding new pool."
           g.seed()
@@ -422,10 +422,10 @@ if __name__ == "__main__":
 
     #create/reset the trade engine
     te.reset()
-
+        
     #get the next gene
     ag = g.get_next()
-
+    
     #configure the trade engine
     te = load_config_into_object({'set':ag},te)
 
