@@ -34,14 +34,14 @@ def class_call_metrics(func):
     def _decorator(self, *args, **kwargs):
         if not hasattr(self, '_metrics'):
             self._metrics = {}
-    start = time.time()
-    result = func(self, *args, **kwargs)
-    finish = time.time()
-    if not self._metrics.has_key(func.__name__):
-        self._metrics.update({func.__name__:{'total_time':0,'calls':0}})
-    self._metrics[func.__name__]['total_time'] += finish - start
-    self._metrics[func.__name__]['calls'] += 1
-    return result
+        start = time.time()
+        result = func(self, *args, **kwargs)
+        finish = time.time()
+        if not self._metrics.has_key(func.__name__):
+            self._metrics.update({func.__name__:{'total_time':0,'calls':0}})
+        self._metrics[func.__name__]['total_time'] += finish - start
+        self._metrics[func.__name__]['calls'] += 1
+        return result
     return _decorator
 
 #decorator which can be used on funcitons
@@ -65,7 +65,7 @@ def get_metrics():
 
 
 if __name__ == '__main__':
-    class test():
+    class test():    
         @class_call_metrics
         def test(self,data):
             """test method doc string"""
@@ -74,7 +74,7 @@ if __name__ == '__main__':
                 for x in range(9999):
                     z += 1
 
-            print "data:",data
+            print "data:",data              
             return 1
 
 
@@ -86,7 +86,7 @@ if __name__ == '__main__':
     t = test()
     for i in range(10):
         print t.test(i)
-
+    
     print t._metrics
     print t.test.__doc__
 

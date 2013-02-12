@@ -45,8 +45,8 @@ class cache:
     def __init__(self):
         self.using_redis = using_redis
         self.serialize_with = 'JSON' #or 'cPickle' or 'None'
-        self.partitions = 1 #default 1 (one redis instance)
-                            #each additional instance assumes +1 to the last port number
+        self.partitions = 1 #default 1 (one redis instance) 
+                    #each additional instance assumes +1 to the last port number
         self.partition_history = {'0':0,'1':0,'2':0,'3':0,'4':0,'5':0,'6':0,'7':0}
         self.port = 6379
         self.r = None
@@ -133,13 +133,13 @@ if __name__ == '__main__':
     print 'building the data sets'
     #xlarge = os.urandom(100000000) #100MB
     #large = os.urandom(10000000)   #10MB
-    #med = os.urandom(1000000)      #1MB
-    #small = os.urandom(100000)     #100KB
+    #med = os.urandom(1000000)  #1MB
+    #small = os.urandom(100000) #100KB
 
-    xlarge = range(10000) #1M
-    large = range(1000)   #1M
-    med = range(100)      #100K
-    small = range(10)     #10K
+    xlarge = range(10000)   #1M
+    large = range(1000) #1M
+    med = range(100)    #100K
+    small = range(10)   #10K
 
     key_set1 = []
     key_set2 = []

@@ -45,7 +45,7 @@ def make_pid():
     md = hashlib.md5()
     md.update(str(time()) + str(random.random() * 1000000))
     return md.hexdigest()[0:16]
-
+    
 
 print "-"*80
 print "\n\tCommand line options:\n\t\tserver\t\tlaunches only the server components\n\t\tclient\t\tlaunches only the client components\n\t\tall\t\tlaunches all components"
@@ -107,7 +107,7 @@ else:
     else:
         print "gal: Configuration loaded."
 
-#open a null file to redirect stdout/stderr from the launched subprocesses
+#open a null file to redirect stdout/stderr from the launched subprocesses 
 fnull = open(os.devnull,'w')
 
 if GENE_SERVER_STDERR_FILE == "/dev/null":
@@ -280,11 +280,11 @@ for cmd_line in monitored_launch:
     retry = MONITORED_PROCESS_LAUNCH_TIMEOUT
     while retry > 0:
         sleep(1)
-        cpl = json.loads(server.pid_list())    #get the current pid list
+        cpl = json.loads(server.pid_list()) #get the current pid list
         npl = list(set(epl) ^ set(cpl))     #find the new pid(s)
-        epl = cpl                #update the existing pid list
+        epl = cpl               #update the existing pid list
         if new_pid in npl:
-            monitor.update({new_pid:{'cmd':cmd_line,'process':p}})    #store the pid/cmd_line/process
+            monitor.update({new_pid:{'cmd':cmd_line,'process':p}})  #store the pid/cmd_line/process
             print "gal: Monitored Process Launched (PID:",new_pid,"CMD:",cmd_line,")"
             break
         else:
@@ -311,7 +311,7 @@ while 1:
             count = 0
             server.save()
         if run_client == 0:
-            sleep(30)
+            sleep(30) 
 
     #process monitor loop
     for pid in monitor.keys():
@@ -321,7 +321,7 @@ while 1:
             print "gal: WATCHDOG: PID",pid,"EXPIRED"
             #remove the expired PID
             server.pid_remove(pid)
-            epl = json.loads(server.pid_list())     #get the current pid list
+            epl = json.loads(server.pid_list()) #get the current pid list
             cmd_line = monitor[pid]['cmd']
             #terminate the process
             terminate_process(monitor[pid]['process'])
@@ -334,17 +334,17 @@ while 1:
                 retry = MONITORED_PROCESS_LAUNCH_TIMEOUT
                 while retry > 0:
                     sleep(1)
-                    cpl = json.loads(server.pid_list())    #get the current pid list
+                    cpl = json.loads(server.pid_list()) #get the current pid list
                     npl = list(set(epl) ^ set(cpl))     #find the new pid(s)
-                    epl = cpl                #update the existing pid list
+                    epl = cpl               #update the existing pid list
                     if new_pid in npl:
-                        monitor.update({new_pid:{'cmd':cmd_line,'process':p}})    #store the pid/cmd_line/process
+                        monitor.update({new_pid:{'cmd':cmd_line,'process':p}})  #store the pid/cmd_line/process
                         print "gal: Monitored Process Launched (PID:",new_pid,"CMD:",cmd_line,")"
                         launching = 0
                         break
                     else:
                         retry -= 1
                 if retry == 0:
-                    print "gal: ERROR: Monitored Process Failed to Launch","(CMD:",cmd_line,")"
+                    print "gal: ERROR: Monitored Process Failed to Launch","(CMD:",cmd_line,")"     
 
 fnull.close()
