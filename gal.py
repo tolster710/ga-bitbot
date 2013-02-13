@@ -45,7 +45,7 @@ def make_pid():
     md = hashlib.md5()
     md.update(str(time()) + str(random.random() * 1000000))
     return md.hexdigest()[0:16]
-    
+
 
 print "-"*80
 print "\n\tCommand line options:\n\t\tserver\t\tlaunches only the server components\n\t\tclient\t\tlaunches only the client components\n\t\tall\t\tlaunches all components"
@@ -107,7 +107,7 @@ else:
     else:
         print "gal: Configuration loaded."
 
-#open a null file to redirect stdout/stderr from the launched subprocesses 
+#open a null file to redirect stdout/stderr from the launched subprocesses
 fnull = open(os.devnull,'w')
 
 if GENE_SERVER_STDERR_FILE == "/dev/null":
@@ -311,7 +311,7 @@ while 1:
             count = 0
             server.save()
         if run_client == 0:
-            sleep(30) 
+            sleep(30)
 
     #process monitor loop
     for pid in monitor.keys():
@@ -345,6 +345,6 @@ while 1:
                     else:
                         retry -= 1
                 if retry == 0:
-                    print "gal: ERROR: Monitored Process Failed to Launch","(CMD:",cmd_line,")"     
+                    print "gal: ERROR: Monitored Process Failed to Launch","(CMD:",cmd_line,")"
 
 fnull.close()
