@@ -111,13 +111,6 @@ def index():
         clients += "----> "+ apid + '<br>'
     clients += "-"*80 + '<br>' * 2
 
-    pids = json.loads(server.get_pids())
-    monitor = "-"*80 + '<br>'
-    monitor += "Process monitor info (by PID)" + '<br>'
-    monitor += "-"*80 + '<br>'
-    monitor +=  ppdict(pids) + '<br>'*2
-    monitor = monitor.replace('\n','<br>')
-
     best = "-"*80 + '<br>'
     best += "Highest scoring genes (per quartile)" + '<br>'
     best += "-"*80 + '<br>'
@@ -130,6 +123,14 @@ def index():
         best += "Quartile: " + str(quartile) + " :: " + str(time.ctime()) + '<br>'
         best += ppdict(ag) + '<br>'
     best = best.replace('\n','<br>')
+
+    pids = json.loads(server.get_pids())
+    monitor = "-"*80 + '<br>'
+    monitor += "Process monitor info (by PID)" + '<br>'
+    monitor += "-"*80 + '<br>'
+    monitor +=  ppdict(pids) + '<br>'*2
+    monitor = monitor.replace('\n','<br>')
+
     template = template.replace('{LAST_UPDATE}',time.ctime())
     template = template.replace('{SYS_TRIGGER}',trigger)
     template = template.replace('{SYS_MONITOR}',monitor)
