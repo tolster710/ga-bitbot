@@ -37,6 +37,7 @@ import sys
 import time
 import json
 import hashlib
+import SocketServer
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
 from operator import itemgetter, attrgetter
@@ -593,8 +594,11 @@ def get_gene_server_metrics():
 class RequestHandler(SimpleXMLRPCRequestHandler):
     rpc_paths = ('/gene','/RPC2')
 
+# Threaded mix-in
+class AsyncXMLRPCServer(SocketServer.ThreadingMixIn,SimpleXMLRPCServer): pass
+
 #create the server
-server = SimpleXMLRPCServer((__server__, __port__),requestHandler = RequestHandler,logRequests = False, allow_none = True)
+server = AsyncXMLRPCServer((__server__, __port__),requestHandler = RequestHandler,logRequests = False, allow_none = True)
 
 #register the functions
 #client services
