@@ -37,10 +37,12 @@ import sys
 import time
 import json
 import hashlib
+import SocketServer
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
 from operator import itemgetter, attrgetter
 from copy import deepcopy
+from threading import Lock
 
 import paths
 import call_metrics
@@ -198,15 +200,15 @@ def get_gene(n_sec,quartile,pid = None):
             r.append(a_d)
 
     #if no records found, grab the most recent
-    if len(r) == 0:
-        r = [sorted(g_gene_library[gdh]['gene_high_scores'][quartile - 1], key=itemgetter('score'),reverse = True)[0]]
-        r.append(sorted(g_gene_library[gdh]['gene_best'][quartile - 1], key=itemgetter('score'),reverse = True)[0])
-    
-    if len(r) > 1:
+    if len(r) == 0 and len(g_gene_library[gdh]['gene_high_scores'][quartile - 1]) > 0:
+        r = sorted(g_gene_library[gdh]['gene_high_scores'][quartile - 1], key=itemgetter('time'),reverse = True)[0]
+        print "get",r['time'],r['score']
+    elif len(g_gene_library[gdh]['gene_high_scores'][quartile - 1]) > 0:
         #if more than one record found find the highest scoring one
         r = sorted(r, key=itemgetter('score'),reverse = True)[0]
-
-    print "get",r['time'],r['score']
+        print "get",r['time'],r['score']
+    else:
+        r = {}
         
     return json.dumps(r)
 
@@ -593,8 +595,27 @@ def get_gene_server_metrics():
 class RequestHandler(SimpleXMLRPCRequestHandler):
     rpc_paths = ('/gene','/RPC2')
 
+# Threaded mix-in
+class AsyncXMLRPCServer(SocketServer.ThreadingMixIn,SimpleXMLRPCServer):
+    def __init__(self, *args, **kwargs):
+        SimpleXMLRPCServer.__init__(self, *args, **kwargs)
+        self.lock = Lock()
+
+    def process_request_thread(self, request, client_address):
+        # Blatant copy of SocketServer.ThreadingMixIn, but we need a single threaded handling of the request
+        self.lock.acquire()
+        try:
+            self.finish_request(request, client_address)
+            self.shutdown_request(request)
+        except:
+            self.handle_error(request, client_address)
+            self.shutdown_request(request)
+        finally:
+            self.lock.release()
+
+
 #create the server
-server = SimpleXMLRPCServer((__server__, __port__),requestHandler = RequestHandler,logRequests = False, allow_none = True)
+server = AsyncXMLRPCServer((__server__, __port__),requestHandler = RequestHandler,logRequests = False, allow_none = True)
 
 #register the functions
 #client services
