@@ -42,6 +42,7 @@ from SimpleXMLRPCServer import SimpleXMLRPCServer
 from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
 from operator import itemgetter, attrgetter
 from copy import deepcopy
+from threading import Lock
 
 import paths
 import call_metrics
@@ -595,7 +596,23 @@ class RequestHandler(SimpleXMLRPCRequestHandler):
     rpc_paths = ('/gene','/RPC2')
 
 # Threaded mix-in
-class AsyncXMLRPCServer(SocketServer.ThreadingMixIn,SimpleXMLRPCServer): pass
+class AsyncXMLRPCServer(SocketServer.ThreadingMixIn,SimpleXMLRPCServer):
+    def __init__(self, *args, **kwargs):
+        SimpleXMLRPCServer.__init__(self, *args, **kwargs)
+        self.lock = Lock()
+
+    def process_request_thread(self, request, client_address):
+        # Blatant copy of SocketServer.ThreadingMixIn, but we need a single threaded handling of the request
+        self.lock.acquire()
+        try:
+            self.finish_request(request, client_address)
+            self.shutdown_request(request)
+        except:
+            self.handle_error(request, client_address)
+            self.shutdown_request(request)
+        finally:
+            self.lock.release()
+
 
 #create the server
 server = AsyncXMLRPCServer((__server__, __port__),requestHandler = RequestHandler,logRequests = False, allow_none = True)
